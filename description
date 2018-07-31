@@ -1,0 +1,27 @@
+Hello !
+
+This repository is just about to save it and explain the objective and how this works. I'm a begginer, so its pretty simple ;)
+
+The main problem is: When you have large areas and long temporal intervals for filtering landsat 8 images it gets so hard to select
+and download them. So, i made up this code in R for filtering and clustering. The filters are based in Land Cloud Cover and the clusters 
+in a date range that can be defined for each purpose. After I get the cluster, a list of Scene Identifiers can be generated; with this 
+list there's an module in python that easily download the scenes and with a simple for loop we can set the download of hunndred of scenes.
+The repository for download is from a guy called Yann Forget, with his 'landsatxplore' module (I'm new at Github so i dont know yet how
+to link him, sorry).
+link for Yann Forget - landsatxplore:  https://landsat.usgs.gov/pathrow-shapefiles
+
+
+I need two inputs for this code to run: 
+
+1. The metadata table that can be generated after a search in the site https://earthexplorer.usgs.gov/. This table has all atributes of
+each scene, like Acquisition time, cloud cover, time of capture, etc. So, you select the area, the filters, and search.
+  -> In the site, look for: 'Click here to export your results' , here is where you will find this table.
+  
+2. There's a shapefile with the route of landsat 8 satelites, this route is descripted as WRS-2 and has every position of capturing
+scenes for the landsat 7 & landsat 8. With this file, you can select only the tiles that you want. If the areas get so big, you can use
+the tool 'select by location' and intersect the shape with another polygon containing the area of a country, continent, etc. Ok, in the 
+end, will be needed only the selected tiles and from this, an .txt export from selected features. So, here's the second input for the code.
+  -> The shapefile with WRS-2 (Worldwide Reference System) can be downloaded from: https://landsat.usgs.gov/pathrow-shapefiles
+
+
+
