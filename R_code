@@ -1,0 +1,99 @@
+library(dplyr)
+library(purrr)
+library(stringr)
+library(data.table)
+library(ggplot2)
+
+
+
+
+rm(list=ls())
+
+setwd("Define your place of work")
+
+
+
+##metadata table
+mtdd <- read.csv('name of file', sep = ",", dec = ".", stringsAsFactors = F, check.names = F)
+
+#link to download quick looks
+mtdd$link_zip <- paste0("https://earthexplorer.usgs.gov/browse/gisready/landsat_8/", mtdd$`Landsat Product Identifier`)
+
+#table with tiles that you want, designed as colunm names 'PATH' and 'ROW'
+pthrow <- read.csv("select_WRS2_CERRADO.txt", sep = ";", dec = ".", stringsAsFactors = F, check.names = F)
+pthrow <- pthrow %>%
+  select(PATH, ROW)
+##join based in path and rows
+join <- merge(mtdd, pthrow, by.x = c("WRS Path", "WRS Row"), by.y = c("PATH", "ROW"), all = F)
+
+## join summarised (data e cloud cover)     
+join2 <- join %>%
+  select(`Landsat Scene Identifier`,`WRS Path`, `WRS Row`, `Acquisition Date`, `LL Corner Long dec`, `Land Cloud Cover`, `Scene Cloud Cover`, link_zip)
+
+
+##converting the Acquisition Date colunm into date class
+join2$`Acquisition Date` <- as.factor(join2$`Acquisition Date`)
+join2$`Acquisition Date` <- as.Date(join2$`Acquisition Date`, "%Y/%m/%d")
+join2$mes <- month(join2$`Acquisition Date`)
+join2$ano <- year(join2$`Acquisition Date`)
+
+#concatenating the PATH and ROW colunm to simplify the filters
+join2 <- join2 %>%
+  mutate(caminhos = as.numeric(paste0(join2$`WRS Path`, join2$`WRS Row`)))
+
+
+##grouping by month to check the amount of available images in this period
+jj <- join2 %>% 
+  group_by(gr=cut(`Acquisition Date`, breaks= seq(min(join2$`Acquisition Date`), by = "month", 
+                                                  length.out = length(join2$`Acquisition Date`)))) %>%
+  arrange(gr)
+##setting an single ID for each month group
+jj <- transform(jj,id=as.numeric(factor(jj$gr)))
+jj$pthrow <- as.numeric(paste(jj$WRS.Path,jj$WRS.Row, sep = ""))
+
+##creating an object with the paths and rows to be used in the loop
+paths <- data.table(paths = unique(jj$pthrow))
+
+
+#list to save clusters inside
+datalist <- list()  
+  
+ #LOOP
+for (i in 1:nrow(paths)) {
+
+ ##inside of each summarised join table, select based on paths object the images of the full catalog
+ select_per_paths <- join2[join2$caminhos==unlist(paths)[i],] %>%
+   ##the select images grouped by the parameter that you want, in this case 'quarter' - can be a vector with numeric cuts
+    group_by(gr=cut(`Acquisition Date` , breaks = "quarter" ))
+ 
+    
+ #inside of each data frame 'select_per_paths', get the grouping based on the groups generated previouly
+ #which.min selects only the min value for each group based on land cloud cover
+ sumarise_per_path <- select_per_paths %>%
+  group_by(gr) %>%
+  slice(which.min(`Land Cloud Cover`))
+ 
+    ##save the cenes filtered in datalist object
+      datalist[[i]] <- sumarise_per_path
+      
+  
+}
+
+
+##get all that tables together
+big_bind <- dplyr::bind_rows(datalist)
+## split them based on the groups 'gr'
+split_per_group <- split.data.frame(big_bind, big_bind$gr)
+
+###in here u can open the list and check the clusters and save the one that fits for you indexing like split_per_group[[??]
+
+write.table(split_per_group[[3]], "name_of_output.csv", sep = ";", dec = ",", row.names = F)
+
+  
+
+
+
+
+  
+
+
