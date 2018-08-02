@@ -26,4 +26,9 @@ end, will be needed only the selected tiles and from this, an .txt export from s
   -> The shapefile with WRS-2 (Worldwide Reference System) can be downloaded from: https://landsat.usgs.gov/pathrow-shapefiles
 
 
+The chronology for the work:
+
+After you get the inputs, you run the code descripted in the 'R_code' file,  from this script the output is a table with the Scene IDs
+for download. Then, with this output file get it running into a python code descripted in 'PYTHON_code'.
+
 
