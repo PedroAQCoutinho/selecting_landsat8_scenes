@@ -1,0 +1,51 @@
+import os
+from landsatxplore.earthexplorer import EarthExplorer
+import csv
+
+
+os.chdir('your path')
+
+with open('output.csv', 'r') as csvfile:
+	readCSV = csv.reader(csvfile, delimiter = ';')
+	
+	scenes = []
+	
+	next(csvfile)
+
+
+
+	
+	
+	for row in readCSV:
+		scene = row[0]
+		
+		scenes.append(scene)
+
+print(scenes)
+
+
+print(len(scenes)+1)
+
+x=0
+
+while x < (len(scenes)+1):
+	
+	print('starting the try, scene: ' , scenes[x])
+
+	try:
+
+		ee = EarthExplorer('xxxxxxxx', 'xxxxxxx')
+		
+		print('DOWNLOADING SCENE: ', scenes[x])
+		
+		ee.download(scene_id= scenes[x], output_dir='your path')
+		
+		ee.logout()
+		
+		
+	
+	except Exception:
+		
+		print('RESTARTING DOWNLOAD OF :', scenes[x])
+		
+		
