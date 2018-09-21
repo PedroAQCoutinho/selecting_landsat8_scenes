@@ -17,10 +17,12 @@ setwd("Define your place of work")
 mtdd <- read.csv('name of file', sep = ",", dec = ".", stringsAsFactors = F, check.names = F)
 
 #link to download quick looks
+#If you want to check the images before download them, there's the possibility of downloading the quicklooks.
 mtdd$link_zip <- paste0("https://earthexplorer.usgs.gov/browse/gisready/landsat_8/", mtdd$`Landsat Product Identifier`)
 
 #table with tiles that you want, designed as colunm names 'PATH' and 'ROW'
-pthrow <- read.csv("select_WRS2_CERRADO.txt", sep = ";", dec = ".", stringsAsFactors = F, check.names = F)
+#This table was exported from ArcGis, after the selecting by location, based in another shape with the feature of interest
+pthrow <- read.csv("name of file", sep = ";", dec = ".", stringsAsFactors = F, check.names = F)
 pthrow <- pthrow %>%
   select(PATH, ROW)
 ##join based in path and rows
@@ -34,6 +36,7 @@ join2 <- join %>%
 ##converting the Acquisition Date colunm into date class
 join2$`Acquisition Date` <- as.factor(join2$`Acquisition Date`)
 join2$`Acquisition Date` <- as.Date(join2$`Acquisition Date`, "%Y/%m/%d")
+#Creating colunms for month and year
 join2$mes <- month(join2$`Acquisition Date`)
 join2$ano <- year(join2$`Acquisition Date`)
 
