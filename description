@@ -2,14 +2,14 @@
 
 Hello !
 
-This repository is just about to save it and explain the objective and how this works. I'm a begginer, so its pretty simple ;)
+This repository is about to get it registered by explaining the objective and how it. works. I'm a begginer, so its pretty simple ;)
 
 The main problem is: When you have large areas and long temporal intervals for filtering landsat 8 images it gets so hard to select
 and download them. So, i made up this code in R for filtering and clustering. The filters are based in Land Cloud Cover and the clusters 
 in a date range that can be defined for each purpose. After I get the cluster, a list of Scene Identifiers can be generated; with this 
 list there's an module in python that easily download the scenes and with a simple for loop we can set the download of hunndred of scenes.
 The repository for download is from a guy called Yann Forget, with his 'landsatxplore' module (I'm new at Github so i dont know yet how
-to link him, sorry).
+to link him properly).
 link for Yann Forget - landsatxplore:  https://landsat.usgs.gov/pathrow-shapefiles
 
 
@@ -20,7 +20,7 @@ each scene, like Acquisition time, cloud cover, time of capture, etc. So, you se
   -> In the site, look for: 'Click here to export your results' , here is where you will find this table.
   
 2. There's a shapefile with the route of landsat 8 satelites, this route is descripted as WRS-2 and has every position of capturing
-scenes for the landsat 7 & landsat 8. With this file, you can select only the tiles that you want. If the areas get so big, you can use
+scenes for the landsat 7 & landsat 8. With this file, you can select only the tiles that you want. If the areas get much big, you can use
 the tool 'select by location' and intersect the shape with another polygon containing the area of a country, continent, etc. Ok, in the 
 end, will be needed only the selected tiles and from this, an .txt export from selected features. So, here's the second input for the code.
   -> The shapefile with WRS-2 (Worldwide Reference System) can be downloaded from: https://landsat.usgs.gov/pathrow-shapefiles
@@ -28,7 +28,7 @@ end, will be needed only the selected tiles and from this, an .txt export from s
 
 The chronology for the work:
 
-After you get the inputs, you run the code descripted in the 'R_code' file,  from this script the output is a table with the Scene IDs
-for download. Then, with this output file get it running into a python code descripted in 'PYTHON_code'.
+After you get the inputs, you run the code described in the 'R_code' file,  from this script the output is a table with the Scene IDs
+for download. Then, with this output file get it running into a python code described in 'PYTHON_code'.
 
 
